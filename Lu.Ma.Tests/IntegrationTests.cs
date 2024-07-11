@@ -10,11 +10,11 @@ public class IntegrationTests
             return;
         }
 
-        await foreach (var @event in TestHelpers.CalendarManager.ListEventsAsync())
+        await foreach (var @event in TestHelpers.CalendarManager!.ListEventsAsync())
         {
             Assert.NotNull(@event);
 
-            await foreach (var guest in TestHelpers.EventManager.GetEventGuestsAsync(@event.ApiId!))
+            await foreach (var guest in TestHelpers.EventManager!.GetEventGuestsAsync(@event.ApiId!))
             {
                 Assert.NotNull(guest);
             }
