@@ -5,6 +5,11 @@ public class IntegrationTests
     [Fact]
     public async Task GetEventAsync_ShouldReturnEvents()
     {
+        if (!TestHelpers.HasEnv())
+        {
+            return;
+        }
+
         await foreach (var @event in TestHelpers.CalendarManager.ListEventsAsync())
         {
             Assert.NotNull(@event);

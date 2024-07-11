@@ -22,7 +22,6 @@ public static class TestHelpers
 
         httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
-
         httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
         var lumaHttpClient = new LumaHttpClient(httpClient, logger, Options.Create(new LumaApiOptions { ApiKey = apiKey }));
@@ -72,5 +71,21 @@ public static class TestHelpers
 
         // Return the path of the .csproj file if found, or null if not found
         return Path.GetDirectoryName(csprojFile) ?? throw new ArgumentNullException("csprojFile");
+    }
+
+    public static bool HasEnv()
+    {
+        try
+        {
+            var result = GetEnvVar("LUMA_API_KEY");
+
+            ArgumentNullException.ThrowIfNull(result, nameof(result));
+
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 }
