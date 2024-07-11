@@ -7,11 +7,16 @@ namespace Lu.Ma.Tests;
 
 public static class TestHelpers
 {
-    public static readonly EventManager EventManager;
-    public static readonly CalendarManager CalendarManager;
+    public static readonly EventManager? EventManager;
+    public static readonly CalendarManager? CalendarManager;
 
     static TestHelpers()
     {
+        if (!HasEnv())
+        {
+            return;
+        }
+
         var apiKey = GetEnvVar("LUMA_API_KEY");
 
         var logger = LoggerFactory.Create(x => x.ClearProviders()).CreateLogger<LumaHttpClient>();
@@ -52,7 +57,7 @@ public static class TestHelpers
     private static string GetCurrentProjectDirectory()
     {
         // Get the executing assembly
-        Assembly assembly = Assembly.GetExecutingAssembly();
+        var assembly = Assembly.GetExecutingAssembly();
 
         // Get the path of the executing assembly
         string assemblyPath = assembly.Location;
@@ -83,7 +88,7 @@ public static class TestHelpers
 
             return true;
         }
-        catch (Exception)
+        catch (LumaApiException)
         {
             return false;
         }
