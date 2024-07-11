@@ -45,6 +45,32 @@ public void ConfigureServices(IServiceCollection services)
 
 You can find the `ServiceCollectionExtensions` class [here](path/to/ServiceCollectionExtenstions.cs).
 
+## Supported API Functions
+
+### Lu.Ma.EventManager Class
+
+| Function                | Required Parameters                                                                                                         | Description                                          | Return Type                           | DOC URL                                    | 
+|-------------------------|-----------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------|---------------------------------------|-------------------------------------------|
+| `CreateEventAsync`      | `CreateEventRequest request`                                                                                                | Create an event under your Luma account              | `Task<CreateEventResponse>`           | [Create Event](https://docs.lu.ma/reference/create-event)              |
+| `GetEventAsync`         | `string apiId`                                                                                                              | Get details about an event you are a host of         | `Task<GetEventResponse>`              | [Get Event](https://docs.lu.ma/reference/get-event)                    |
+| `GetEventGuestsAsync`   | `string eventApiId`, `string? approvalStatus = null`, `string? sortColumn = null`, `string? sortDirection = null`            | Get list of guests who have registered or been invited to an event | `IAsyncEnumerable<EventEntry>`       | [Get Event Guests](https://docs.lu.ma/reference/get-event-guests)      |
+| `UpdateEventAsync`      | `UpdateEventRequest request`                                                                                                | Update attributes on the event                       | `Task`                                | [Update Event](https://docs.lu.ma/reference/update-event)              |
+| `GetEventGuestAsync`    | `string eventApiId`, `string? apiId = null`, `string? email = null`, `string? proxyKey = null`                               | Get a guest by their Guest API ID, email or Proxy Key | `Task<EventEntry>`                   | [Get Event Guest](https://docs.lu.ma/reference/get-event-guests-copy) |
+| `AddGuestsAsync`        | `AddGuestRequest request`                                                                                                   | Add a guest to the event. They will be added with the status "Going" | `Task`                                | [Add Guests](https://docs.lu.ma/reference/add-guest)                   |
+| `UpdateGuestStatusAsync` | `UpdateGuestStatusRequest request`                                                                                          | Update the status of a guest                          | `Task`                                | [Update Guest Status](https://docs.lu.ma/reference/update-guest-status) |
+| `AddHostAsync`          | `AddHostRequest request`                                                                                                    | Add a host to help you manage the event              | `Task`                                | [Add Host](https://docs.lu.ma/reference/add-host)                      |
+| `CreateCouponAsync`     | `CreateCouponRequest request`                                                                                               | Create a coupon that can be applied to an event      | `Task`                                | [Create Coupon](https://docs.lu.ma/reference/create-coupon)            |
+| `UpdateCouponAsync`     | `UpdateCouponRequest request`                                                                                               | Update a coupon on an event                          | `Task`                                | [Update Coupon](https://docs.lu.ma/reference/create-coupon-copy)       |
+
+### Lu.Ma.CalendarManager Class
+
+| Function                | Required Parameters                                                                                                         | Description                                          | Return Type                           | DOC URL                                    | 
+|-------------------------|-----------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------|---------------------------------------|-------------------------------------------|
+| `ListEventsAsync`       | `DateTime? before = null`, `DateTime? after = null`                                                                         | List all events managed by your calendar             | `IAsyncEnumerable<CalendarEntry>`     | [List Events](https://docs.lu.ma/reference/calendar-list-events)          |
+| `ImportPeopleAsync`     | `ImportPeopleRequest request`                                                                                               | Import people to your calendar to invite them to events and send them newsletters | `Task`                                | [Import People](https://docs.lu.ma/reference/calendar-list-events)         |
+
+
+
 ## Usage
 
 Below are examples of how to use the `CalendarManager` and `EventManager` classes.
