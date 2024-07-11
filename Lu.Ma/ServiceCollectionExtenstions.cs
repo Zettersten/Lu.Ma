@@ -3,11 +3,14 @@ using Lu.Ma.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Lu.Ma;
 
 public static class ServiceCollectionExtensions
 {
+    [RequiresDynamicCode("config.GetSection(\"LumaApi\").Bind(options);")]
+    [RequiresUnreferencedCode("config.GetSection(\"LumaApi\").Bind(options);")]
     public static IServiceCollection AddLuma(this IServiceCollection services, Action<LumaApiOptions>? configureOptions = null)
     {
         services.AddOptions<LumaApiOptions>()

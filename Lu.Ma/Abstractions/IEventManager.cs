@@ -65,7 +65,7 @@ public interface IEventManager
     /// <param name="sortDirection">The direction to sort.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>An asynchronous enumerable of event entries.</returns>
-    IAsyncEnumerable<EventEntry> GetEventGuestsAsync(string eventApiId, string? approvalStatus = null, string? sortColumn = null, string? sortDirection = null, [EnumeratorCancellation] CancellationToken cancellationToken = default);
+    IAsyncEnumerable<EventEntry> GetEventGuestsAsync(string eventApiId, string? approvalStatus = null, string? sortColumn = null, string? sortDirection = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Updates a coupon on an event.
