@@ -55,8 +55,8 @@ Below are examples of how to use the `CalendarManager` and `EventManager` classe
 
 ```csharp
 var calendarManager = serviceProvider.GetService<CalendarManager>();
-var events = await calendarManager.ListEventsAsync(DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow);
-foreach (var eventItem in events)
+
+await foreach (var eventItem in calendarManager.ListEventsAsync(DateTime.UtcNow.AddMonths(-1), DateTime.UtcNow))
 {
     Console.WriteLine($"{eventItem.Name} - {eventItem.StartTime}");
 }

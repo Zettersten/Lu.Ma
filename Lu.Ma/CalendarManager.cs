@@ -1,23 +1,17 @@
-﻿using Lu.Ma.Extensions;
-using Lu.Ma.Http;
+﻿using Lu.Ma.Abstractions;
+using Lu.Ma.Extensions;
 using Lu.Ma.Models;
 using Lu.Ma.Models.Shared;
 using System.Runtime.CompilerServices;
 
 namespace Lu.Ma;
 
-internal class CalendarManager(LumaHttpClient httpClient)
+public class CalendarManager(ILumaHttpClient httpClient) : ICalendarManager
 {
-    private readonly LumaHttpClient _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+    private readonly ILumaHttpClient _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     private const string CalendarEndpoint = "/public/v1/calendar";
 
-    /// <summary>
-    /// Lists events managed by your Calendar.
-    /// </summary>
-    /// <param name="before">Get events at or before this timestamp.</param>
-    /// <param name="after">Get events at or after this timestamp.</param>
-    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-    /// <returns>An asynchronous enumerable of calendar entries.</returns>
+    /// <inheritdoc />
     public async IAsyncEnumerable<CalendarEntry> ListEventsAsync(
         DateTime? before = null,
         DateTime? after = null,
@@ -56,12 +50,7 @@ internal class CalendarManager(LumaHttpClient httpClient)
         }
     }
 
-    /// <summary>
-    /// Imports people to your calendar.
-    /// </summary>
-    /// <param name="request">The import people request details.</param>
-    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <inheritdoc />
     public Task ImportPeopleAsync(ImportPeopleRequest request, CancellationToken cancellationToken = default)
     {
         return _httpClient.SendRequestAsync<object>((client, c) =>

@@ -1,4 +1,5 @@
-﻿using Lu.Ma.Extensions;
+﻿using Lu.Ma.Abstractions;
+using Lu.Ma.Extensions;
 using Lu.Ma.Models.Shared;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -11,7 +12,7 @@ namespace Lu.Ma.Http;
 /// <summary>
 /// A resilient HTTP client for making requests to the Luma API.
 /// </summary>
-public sealed class LumaHttpClient
+public sealed class LumaHttpClient : ILumaHttpClient
 {
     private readonly HttpClient _httpClient;
     private readonly ILogger<LumaHttpClient> _logger;
@@ -67,53 +68,32 @@ public sealed class LumaHttpClient
             );
     }
 
-    /// <summary>
-    /// Sends a GET request to the specified URI.
-    /// </summary>
-    /// <param name="uri">The URI to send the request to.</param>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response message.</returns>
+    /// <inheritdoc />
     public async Task<HttpResponseMessage> GetAsync(string uri, CancellationToken cancellationToken = default)
     {
         return await _retryPolicy.ExecuteAsync((c) => _httpClient.GetAsync(uri, c), cancellationToken: cancellationToken);
     }
 
-    /// <summary>
-    /// Sends a POST request to the specified URI.
-    /// </summary>
-    /// <param name="uri">The URI to send the request to.</param>
-    /// <param name="content">The HTTP request content sent to the server.</param>
-    /// <param name="cancellationToken">The cancellation token.</param>-
-    /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response message.</returns>
+    /// <inheritdoc />
     public async Task<HttpResponseMessage> PostAsync(string uri, HttpContent content, CancellationToken cancellationToken = default)
     {
         return await _retryPolicy.ExecuteAsync((c) => _httpClient.PostAsync(uri, content, c), cancellationToken: cancellationToken);
     }
 
-    /// <summary>
-    /// Sends a PUT request to the specified URI.
-    /// </summary>
-    /// <param name="uri">The URI to send the request to.</param>
-    /// <param name="content">The HTTP request content sent to the server.</param>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response message.</returns>
+    /// <inheritdoc />
     public async Task<HttpResponseMessage> PutAsync(string uri, HttpContent content, CancellationToken cancellationToken = default)
     {
         return await _retryPolicy.ExecuteAsync((c) => _httpClient.PutAsync(uri, content, c), cancellationToken: cancellationToken);
     }
 
-    /// <summary>
-    /// Sends a DELETE request to the specified URI.
-    /// </summary>
-    /// <param name="uri">The URI to send the request to.</param>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response message.</returns>
+    /// <inheritdoc />
     public async Task<HttpResponseMessage> DeleteAsync(string uri, CancellationToken cancellationToken = default)
     {
         return await _retryPolicy.ExecuteAsync((c) => _httpClient.DeleteAsync(uri, c), cancellationToken: cancellationToken);
     }
 
-    internal async Task<T> SendRequestAsync<T>(Func<LumaHttpClient, CancellationToken, Task<HttpResponseMessage>> requestFunc, CancellationToken cancellationToken = default)
+    /// <inheritdoc />
+    public async Task<T> SendRequestAsync<T>(Func<LumaHttpClient, CancellationToken, Task<HttpResponseMessage>> requestFunc, CancellationToken cancellationToken = default)
     {
         try
         {

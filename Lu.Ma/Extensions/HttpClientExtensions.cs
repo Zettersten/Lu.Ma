@@ -1,8 +1,8 @@
-﻿using Lu.Ma.Http;
+﻿namespace Lu.Ma.Extensions;
 
-namespace Lu.Ma.Extensions;
-
+using Lu.Ma.Serialization;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -33,9 +33,11 @@ public static class HttpClientExtensions
     /// <typeparam name="T">The type of object to serialize.</typeparam>
     /// <param name="obj">The object to serialize.</param>
     /// <returns>A StringContent containing the JSON representation of the object.</returns>
+    [UnconditionalSuppressMessage("AOT", "IL3050:Calling members annotated with 'RequiresDynamicCodeAttribute' may break functionality when AOT compiling.", Justification = "<Pending>")]
+    [UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
     public static StringContent ToJsonContent<T>(this T obj)
     {
-        var json = JsonSerializer.Serialize(obj, JsonOptions);
+        var json = JsonSerializer.Serialize(obj, JsonOptions) ?? string.Empty;
         return new StringContent(json, Encoding.UTF8, "application/json");
     }
 
@@ -46,6 +48,8 @@ public static class HttpClientExtensions
     /// <param name="content">The HTTP content to deserialize.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The deserialized object, or default if deserialization fails.</returns>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
+    [UnconditionalSuppressMessage("AOT", "IL3050:Calling members annotated with 'RequiresDynamicCodeAttribute' may break functionality when AOT compiling.", Justification = "<Pending>")]
     public static async ValueTask<T?> ReadAsJsonAsync<T>(this HttpContent content, CancellationToken cancellationToken = default)
     {
         using var stream = await content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
@@ -95,16 +99,16 @@ public static class HttpClientExtensions
     /// <param name="name">The name of the query parameter.</param>
     /// <param name="value">The value of the query parameter.</param>
     /// <returns>The URL with the added query parameter.</returns>
-    public static string AddQueryParam(this string url, string name, string value)
+    public static string AddQueryParam(this string? url, string? name, string? value)
     {
-        var separator = url.Contains('?') ? '&' : '?';
-        return string.Create(url.Length + name.Length + value.Length + 2, (url, name, value, separator), (span, state) =>
+        if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(value))
         {
-            state.url.AsSpan().CopyTo(span);
-            span[state.url.Length] = state.separator;
-            state.name.AsSpan().CopyTo(span[(state.url.Length + 1)..]);
-            span[state.url.Length + state.name.Length + 1] = '=';
-            Uri.EscapeDataString(state.value).AsSpan().CopyTo(span[(state.url.Length + state.name.Length + 2)..]);
-        });
+            return url ?? string.Empty;
+        }
+
+        var separator = url.Contains('?') ? '&' : '?';
+        var encodedValue = Uri.EscapeDataString(value);
+
+        return string.Concat(url, separator, name, "=", encodedValue);
     }
 }

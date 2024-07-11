@@ -1,4 +1,5 @@
-﻿using Lu.Ma.Http;
+﻿using Lu.Ma.Abstractions;
+using Lu.Ma.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -24,7 +25,7 @@ public static class ServiceCollectionExtensions
             });
 
         services
-            .AddHttpClient<LumaHttpClient>()
+            .AddHttpClient<ILumaHttpClient, LumaHttpClient>()
             .ConfigureHttpClient((sp, client) =>
             {
                 var options = sp.GetRequiredService<IOptions<LumaApiOptions>>().Value;
@@ -37,8 +38,8 @@ public static class ServiceCollectionExtensions
                 ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
             });
 
-        services.AddTransient<EventManager>();
-        services.AddTransient<CalendarManager>();
+        services.AddTransient<IEventManager, EventManager>();
+        services.AddTransient<ICalendarManager, CalendarManager>();
 
         return services;
     }
