@@ -1,4 +1,8 @@
-# Lu.Ma .NET SDK
+![PathCat Icon](https://raw.githubusercontent.com/Zettersten/Lu.Ma/main/icon.png)
+
+# Lu.Ma ✨
+
+[![NuGet Badge](https://buildstats.info/nuget/Lu.Ma)](https://www.nuget.org/packages/Lu.Ma/)
 
 Welcome to the unofficial Lu.Ma .NET SDK! This SDK is designed to provide a seamless way to interact with the Lu.Ma API, allowing you to manage events and calendars programmatically. The SDK is available under the MIT license, and contributions are welcome.
 
