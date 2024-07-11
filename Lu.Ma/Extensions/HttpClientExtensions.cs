@@ -1,13 +1,9 @@
-﻿namespace Lu.Ma.Extensions;
-
-using Lu.Ma.Serialization;
-using System;
+﻿using Lu.Ma.Serialization;
 using System.Diagnostics.CodeAnalysis;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
+
+namespace Lu.Ma.Extensions;
 
 /// <summary>
 /// Provides extension methods for HttpClient to simplify JSON-based API interactions.
@@ -17,7 +13,7 @@ public static class HttpClientExtensions
     /// <summary>
     /// Shared JsonSerializerOptions for consistent JSON handling across all operations.
     /// </summary>
-    private static readonly JsonSerializerOptions JsonOptions = new()
+    public static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         Converters =
@@ -54,42 +50,6 @@ public static class HttpClientExtensions
     {
         using var stream = await content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
         return await JsonSerializer.DeserializeAsync<T>(stream, JsonOptions, cancellationToken).ConfigureAwait(false);
-    }
-
-    /// <summary>
-    /// Creates a GET HttpRequestMessage for the specified URL.
-    /// </summary>
-    /// <param name="url">The URL for the GET request.</param>
-    /// <returns>A new HttpRequestMessage configured for a GET request.</returns>
-    public static HttpRequestMessage CreateGetRequest(this string url) => new(HttpMethod.Get, url);
-
-    /// <summary>
-    /// Creates a POST HttpRequestMessage with a JSON body for the specified URL.
-    /// </summary>
-    /// <typeparam name="T">The type of the body object.</typeparam>
-    /// <param name="url">The URL for the POST request.</param>
-    /// <param name="body">The body object to be serialized to JSON.</param>
-    /// <returns>A new HttpRequestMessage configured for a POST request with a JSON body.</returns>
-    public static HttpRequestMessage CreatePostRequest<T>(this string url, T body) => new(HttpMethod.Post, url)
-    {
-        Content = body.ToJsonContent()
-    };
-
-    /// <summary>
-    /// Sends an HTTP request and reads the response as JSON.
-    /// </summary>
-    /// <typeparam name="T">The type to deserialize the response to.</typeparam>
-    /// <param name="client">The HttpClient instance.</param>
-    /// <param name="request">The HttpRequestMessage to send.</param>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>The deserialized response object.</returns>
-    /// <exception cref="HttpRequestException">Thrown when the response is not successful.</exception>
-    public static async Task<T> SendAndReadJsonAsync<T>(this HttpClient client, HttpRequestMessage request, CancellationToken cancellationToken = default)
-    {
-        using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-        response.EnsureSuccessStatusCode();
-        return await response.Content.ReadAsJsonAsync<T>(cancellationToken: cancellationToken).ConfigureAwait(false)
-            ?? throw new InvalidOperationException("Failed to deserialize the response.");
     }
 
     /// <summary>

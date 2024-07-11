@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Lu.Ma.Serialization;
 
-internal sealed class ISO8601DateTimeConverter : JsonConverter<DateTime>
+public sealed class ISO8601DateTimeConverter : JsonConverter<DateTime>
 {
     public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

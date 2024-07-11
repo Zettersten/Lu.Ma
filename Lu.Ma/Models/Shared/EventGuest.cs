@@ -29,7 +29,7 @@ public sealed class EventGuest
     /// Gets or sets the date and time when the guest was invited to the event.
     /// </summary>
     [JsonPropertyName("invited_at")]
-    public DateTime InvitedAt { get; set; }
+    public DateTime? InvitedAt { get; set; }
 
     /// <summary>
     /// Gets or sets the date and time when the guest checked in to the event.

@@ -15,9 +15,10 @@ public sealed class EventRegistrationAnswers
 
     /// <summary>
     /// Gets or sets the answer to the registration question.
+    /// TODO: Need custom serializer for arrays and string types
     /// </summary>
     [JsonPropertyName("answer")]
-    public string? Answer { get; set; }
+    public object? Answer { get; set; }
 
     /// <summary>
     /// Gets or sets the unique identifier of the question.
