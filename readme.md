@@ -1,4 +1,4 @@
-![PathCat Icon](https://raw.githubusercontent.com/Zettersten/Lu.Ma/main/icon.png)
+![PathCat Icon](https://raw.githubusercontent.com/Zettersten/Lu.Ma/main/logo.png)
 
 # Lu.Ma ✨
 
