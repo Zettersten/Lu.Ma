@@ -1,5 +1,4 @@
 ﻿using Lu.Ma.Models.Shared;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace Lu.Ma.Models;

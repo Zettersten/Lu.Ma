@@ -2,7 +2,6 @@
 
 namespace Lu.Ma.Models.Shared;
 
-
 /// <summary>
 /// Represents an event host.
 /// </summary>
